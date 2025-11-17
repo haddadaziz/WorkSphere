@@ -1,0 +1,1 @@
+const ajouter_employe_modal = document.getElementById("ajouter_employe_modal")

@@ -7,94 +7,117 @@
     <title>WorkSphere</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="regex.js" defer></script>
 </head>
 
 <body>
     <div class="flex h-screen">
         <!-- Visualiser les unassigned worker et ajouter un worker -->
-        <aside class="w-96 bg-white p-6 shadow-lg overflow-y-auto" id="ajouter_employe_modal">
+        <aside class="w-96 bg-white p-6 shadow-lg h-screen flex flex-col">
+            <div id="unassigned_workers_view" class="flex flex-col h-full">
+                <h2 class="text-2xl font-bold mb-6 flex-shrink-0">
+                    Unassigned Staff
+                </h2>
 
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Ajouter un employé</h2>
+                <!-- Pour que la liste devient scrollable -->
+                <div class="flex-1 space-y-3 overflow-y-auto pr-2">
 
-            <form id="add-employee-form" class="space-y-4">
-
-                <div>
-                    <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom Complet *</label>
-                    <input type="text" id="nom" name="nom" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Rôle *</label>
-                    <select id="role" name="role" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Sélectionner un rôle...</option>
-                        <option value="receptionniste">Réceptionniste</option>
-                        <option value="technicien_it">Technicien IT</option>
-                        <option value="agent_securite">Agent de sécurité</option>
-                        <option value="manager">Manager</option>
-                        <option value="nettoyage">Agent de nettoyage</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="photo" class="block text-sm font-medium text-gray-700 mb-1">Photo (URL)</label>
-                    <input type="url" id="photo" name="photo" placeholder="https://..."
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                    <input type="email" id="email" name="email" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div>
-                    <label for="telephone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
-                    <input type="tel" id="telephone" name="telephone"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div class="pt-4 border-t border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Expériences</h3>
-
-                    <div id="experiences-container" class="space-y-4">
-
-                        <div class="p-3 border rounded-md bg-gray-50 relative">
-                            <button type="button"
-                                class="absolute top-1 right-2 text-red-400 hover:text-red-600 font-bold"
-                                disabled>&times;</button>
-                            <div class="mb-2">
-                                <label class="text-xs font-medium text-gray-600">Poste</label>
-                                <input type="text" name="exp_poste[]" placeholder="Entrez le poste occupé"
-                                    class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                            </div>
-                            <div>
-                                <label class="text-xs font-medium text-gray-600">Entreprise</label>
-                                <input type="text" name="exp_entreprise[]" placeholder="Entrez l'entreprise"
-                                    class="w-full px-2 py-1 border border-gray-300 rounded-md">
-                            </div>
+                    <!-- Exemple d'employé 1 -->
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+                        <div class="ml-3">
+                            <p class="text-sm font-semibold text-gray-900">John Doe</p>
+                            <p class="text-xs text-gray-600 ">Technicien IT</p>
                         </div>
                     </div>
 
-                    <button type="button" id="add-experience-btn" disabled
-                        class="mt-4 w-full px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 opacity-70">
-                        + Ajouter une expérience
-                    </button>
+                    <!-- Exemple d'employé 2 -->
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900 ml-3">Alice Smith : Réceptionniste</p>
+                    </div>
+
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                    <button type="button"
-                        class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md font-semibold text-sm hover:bg-gray-50">
-                        Annuler
-                    </button>
-                    <button type="submit" form="add-employee-form"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold text-sm hover:bg-blue-700">
-                        Enregistrer
+                <!-- Bouton ajouter un employe-->
+                <div class="mt-auto pt-6 border-t border-gray-200 flex-shrink-0">
+                    <button id="add_worker_button"
+                        class="w-full px-4 py-3 bg-blue-600 text-white rounded-md font-semibold text-sm hover:bg-blue-700">
+                        Ajouter un nouvel employé
                     </button>
                 </div>
+            </div>
+            <div id="ajouter_employe_view" class="hidden h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6 flex-shrink-0">
+                    <h2 class="text-xl font-bold text-gray-800">Ajouter un employé</h2>
+                    <button id="close_form_button" class="text-gray-500 hover:text-gray-800 text-2xl font-bold"><img
+                            class="w-8 h-8" src="images/close_btn-removebg-preview.png" alt="close button"></button>
+                </div>
+                <form id="add-employee-form" class="space-y-4 flex-1 overflow-y-auto pr-2">
+                    <div>
+                        <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom Complet *</label>
+                        <input type="text" id="nom" name="nom" placeholder="Entrez le nom complet"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Rôle *</label>
+                        <select id="role" name="role" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Sélectionner un rôle...</option>
+                            <option value="receptionniste">Réceptionniste</option>
+                            <option value="technicien_it">Technicien IT</option>
+                            <option value="agent_securite">Agent de sécurité</option>
+                            <option value="manager">Manager</option>
+                            <option value="nettoyage">Agent de nettoyage</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
 
-            </form>
+                    <!-- Partie photo -->
+                    <div>
+                        <label for="photo" class="block text-sm font-medium text-gray-700 mb-1">Photo (URL)</label>
+                        <input type="url" id="photo" name="photo" placeholder="https://..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- Partie Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="Entrez l'email"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- Partie Téléphone -->
+                    <div>
+                        <label for="telephone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                        <input type="tel" id="telephone" name="telephone" placeholder="Entrez le numéro de téléphone"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- Ajouter une experience -->
+                    <div class="pt-4 border-t border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Expériences</h3>
+
+                        <div id="ajouter_experience_container" class="space-y-4">
+                        </div>
+                        <button type="button" id="ajouter_experience_button"
+                            class="mt-4 w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-200 opacity-70">
+                            Ajouter une expérience
+                        </button>
+                    </div>
+
+                    <!-- Bouton submit -->
+                    <div class="flex justify-center gap-3 pt-4 border-t border-gray-200">
+                        <button type="submit" form="add-employee-form"
+                            class="px-4 py-2 w-24 bg-red-600 text-white rounded-md font-semibold text-sm hover:bg-red-700">
+                            Annuler
+                        </button>
+                        <button type="submit" form="add-employee-form"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold text-sm hover:bg-blue-700">
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
         </aside>
         <!-- Plan 2D de l'espace de travail -->
         <div id="workspace2D" class="h-full w-full flex flex-col">

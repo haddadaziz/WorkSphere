@@ -28,7 +28,7 @@
                     </button>
                 </div>
                 <!-- liste scrollable -->
-                <div class="flex-1 space-y-3 overflow-y-auto pr-2">
+                <div id ="unassigned_staff_list" class="flex-1 space-y-3 overflow-y-auto pr-2">
 
                     <!-- Exemple d'employé -->
                     <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
@@ -55,7 +55,7 @@
                     <button id="close_form_button" class="text-gray-500 hover:text-gray-800 text-2xl font-bold"><img
                             class="w-8 h-8" src="images/close_btn-removebg-preview.png" alt="close button"></button>
                 </div>
-                <form id="add-employee-form" class="space-y-4 flex-1 overflow-y-auto pr-2">
+                <form id="add_employee_form" class="space-y-4 flex-1 overflow-y-auto pr-2">
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom Complet *</label>
                         <input type="text" id="nom" name="nom" placeholder="Entrez le nom complet"
@@ -112,11 +112,11 @@
 
                     <!-- Bouton submit -->
                     <div class="flex justify-center gap-3 pt-4 border-t border-gray-200">
-                        <button type="submit" form="add-employee-form"
+                        <button type="button"
                             class="px-4 py-2 w-24 bg-red-600 text-white rounded-md font-semibold text-sm hover:bg-red-700">
                             Annuler
                         </button>
-                        <button type="submit" form="add-employee-form"
+                        <button type="submit"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold text-sm hover:bg-blue-700">
                             Enregistrer
                         </button>

@@ -11,6 +11,52 @@ const hide_menu = document.getElementById("hide_menu")
 const close_sidebar_button = document.getElementById("close_sidebar_button")
 const open_sidebar_button = document.getElementById("open_sidebar_button")
 const workspace2D = document.getElementById("workspace2D")
+const add_employee_form = document.getElementById("add_employee_form")
+const unassigned_staff_list = document.getElementById("unassigned_staff_list")
+
+let staff = []
+
+add_employee_form.addEventListener("submit", function (e) {
+    e.preventDefault()
+    const nom = document.getElementById("nom").value
+    const role = document.getElementById("role").value
+    let photo = document.getElementById("photo_input_url").value
+    const email = document.getElementById("email").value
+    const telephone = document.getElementById("telephone").value
+
+    if (photo === "") {
+        photo = "https://www.gravatar.com/avatar/?d=mp&s=128"
+    }
+
+    const nouvel_employe = {
+        nom: nom,
+        role: role,
+        photo: photo,
+        email: email,
+        tel: telephone
+    }
+    staff.push(nouvel_employe)
+    afficher_les_employes()
+    add_employee_form.reset()
+    photo_preview_url.src = "https://www.gravatar.com/avatar/?d=mp&s=128"
+    ajouter_employe_view.classList.add("hidden")
+    unassigned_workers_view.classList.remove("hidden")
+})
+
+function afficher_les_employes() {
+    unassigned_staff_list.innerHTML = ""
+    staff.forEach(employe => {
+        unassigned_staff_list.innerHTML += `
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200 mb-2">
+                <img src="${employe.photo}" class="w-12 h-12 rounded-full border border-gray-300 object-cover">
+                <div class="ml-3">
+                    <p class="text-sm font-semibold text-gray-900">${employe.nom}</p>
+                    <p class="text-xs text-gray-600">${employe.role}</p>
+                </div>
+            </div>
+        `
+    })
+}
 
 // afficher / cacher le menu
 close_sidebar_button.addEventListener("click", () => {

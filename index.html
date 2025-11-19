@@ -14,32 +14,35 @@
 <body>
     <div class="flex h-screen">
         <!-- Visualiser les unassigned worker et ajouter un worker -->
-        <aside class="w-96 bg-white p-6 shadow-lg h-screen flex flex-col">
+        <aside id="hide_menu" class="w-96 bg-white p-6 shadow-lg h-screen flex flex-col">
             <div id="unassigned_workers_view" class="flex flex-col h-full">
-                <h2 class="text-2xl font-bold mb-6 flex-shrink-0">
-                    Unassigned Staff
-                </h2>
-
-                <!-- Pour que la liste devient scrollable -->
+                <div class="flex flex-cols">
+                    <h2 class="text-2xl font-bold mb-6 flex-shrink-0">
+                        Unassigned Staff
+                    </h2>
+                    <button id="close_sidebar_button" class="p-2 rounded mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 ml-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- liste scrollable -->
                 <div class="flex-1 space-y-3 overflow-y-auto pr-2">
 
-                    <!-- Exemple d'employé 1 -->
+                    <!-- Exemple d'employé -->
                     <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+                        <img id="photo_preview_employe" src="https://www.gravatar.com/avatar/?d=mp&s=128" alt="Aperçu"
+                            class="w-12 h-12 rounded-full border border-gray-300 shadow-sm">
                         <div class="ml-3">
                             <p class="text-sm font-semibold text-gray-900">John Doe</p>
                             <p class="text-xs text-gray-600 ">Technicien IT</p>
                         </div>
                     </div>
-
-                    <!-- Exemple d'employé 2 -->
-                    <div class="flex items-center p-3 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
-                        <p class="text-sm font-semibold text-gray-900 ml-3">Alice Smith : Réceptionniste</p>
-                    </div>
-
                 </div>
 
                 <!-- Bouton ajouter un employe-->
-                <div class="mt-auto pt-6 border-t border-gray-200 flex-shrink-0">
+                <div class="mt-auto flex-shrink-0">
                     <button id="add_worker_button"
                         class="w-full px-4 py-3 bg-blue-600 text-white rounded-md font-semibold text-sm hover:bg-blue-700">
                         Ajouter un nouvel employé
@@ -75,8 +78,10 @@
                     <!-- Partie photo -->
                     <div>
                         <label for="photo" class="block text-sm font-medium text-gray-700 mb-1">Photo (URL)</label>
-                        <input type="url" id="photo" name="photo" placeholder="https://..."
+                        <input type="url" id="photo_input_url" name="photo" placeholder="https://..."
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <img id="photo_preview_url" src="https://www.gravatar.com/avatar/?d=mp&s=128" alt="Aperçu"
+                            class="w-12 h-12 rounded-full border border-gray-300 shadow-sm mt-6">
                     </div>
 
                     <!-- Partie Email -->
@@ -100,7 +105,7 @@
                         <div id="ajouter_experience_container" class="space-y-4">
                         </div>
                         <button type="button" id="ajouter_experience_button"
-                            class="mt-4 w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-200 opacity-70">
+                            class="mt-4 w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-500">
                             Ajouter une expérience
                         </button>
                     </div>
@@ -121,10 +126,113 @@
         </aside>
         <!-- Plan 2D de l'espace de travail -->
         <div id="workspace2D" class="h-full w-full flex flex-col">
+            <button id="open_sidebar_button"
+                class="absolute top-4 left-4 bg-white p-3 rounded-full shadow-lg border border-gray-200 hover:bg-gray-50 hidden z-30">
+                <img src="images/hamburger_menu_icon.png" class="w-6 h-6" alt="Menu">
+            </button>
             <div class="flex flex-1">
-                <div class="room bg-blue-200 w-1/3">
-                    Salle de conférence
+                <div class="room bg-blue-200 w-1/3 flex flex-col items-center justify-start p-2">
+
+                    <div class="flex items-center justify-center gap-2 w-full mb-4">
+                        <h3 class="font-bold text-gray-800 text-lg">
+                            Salle de conférence
+                        </h3>
+
+                        <button class="px-1 py-1 rounded-lg flex items-center justify-center"
+                            title="Ajouter un employé">
+                            <img src="images/iconadd.png" class="w-12 h-12 object-contain">
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 w-full">
+
+                        <div class="bg-white rounded-lg border border-gray-400 flex flex-col items-center justify-center gap-1 cursor-pointer"
+                            title="John Doe">
+                            <img src="https://www.gravatar.com/avatar/?d=mp&s=128"
+                                class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm">
+
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                    </svg>
+                                </button>
+                                <button class="text-gray-400 hover:text-red-600 transition" title="Retirer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white p-1.5 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center justify-center gap-1 cursor-pointer">
+                            <img src="https://www.gravatar.com/avatar/?d=mp&s=128"
+                                class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm">
+
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                    </svg>
+                                </button>
+                                <button class="text-gray-400 hover:text-red-600 transition" title="Retirer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white p-1.5 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center justify-center gap-1 cursor-pointer">
+                            <img src="https://www.gravatar.com/avatar/?d=mp&s=128"
+                                class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm">
+
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                    </svg>
+                                </button>
+                                <button class="text-gray-400 hover:text-red-600 transition" title="Retirer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white p-1.5 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center justify-center gap-1 cursor-pointer">
+                            <img src="https://www.gravatar.com/avatar/?d=mp&s=128"
+                                class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm">
+
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                    </svg>
+                                </button>
+                                <button class="text-gray-400 hover:text-red-600 transition" title="Retirer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="room bg-yellow-200 w-1/3">
                     Réception
                 </div>
@@ -132,7 +240,7 @@
                     Salle des serveurs
                 </div>
             </div>
-            <div class="h-24 bg-gray-600">
+            <div class="h-6 lg:h-24 bg-gray-600">
             </div>
             <div class="flex flex-1">
                 <div class="room bg-purple-200 w-1/3">

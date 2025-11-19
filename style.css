@@ -6,6 +6,10 @@
     font-weight: bold;
     font-size: 1.1rem;
     color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.2)
-    
+    border: 1px solid black
+}
+
+.assign_worker_button{
+    margin-left: 240px;
+    margin-top: -12px;
 }

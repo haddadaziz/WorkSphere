@@ -25,7 +25,7 @@ afficher_les_employes()
 
 // Afficher / Cacher la popup pour assigner un worker
 assign_worker_button.addEventListener("click", () => {
-    
+
     assign_worker_popup.classList.remove("hidden")
 })
 assign_worker_popup_close_button.addEventListener("click", () => {
@@ -40,6 +40,7 @@ add_employee_form.addEventListener("submit", function (e) {
     let photo = document.getElementById("photo_input_url").value
     const email = document.getElementById("email").value
     const telephone = document.getElementById("telephone").value
+    const localisation = "Unassigned"
 
     if (photo === "") {
         photo = "https://www.gravatar.com/avatar/?d=mp&s=128"
@@ -68,8 +69,9 @@ add_employee_form.addEventListener("submit", function (e) {
         photo: photo,
         email: email,
         tel: telephone,
-        experiences: mes_experiences
-    }
+        experiences: mes_experiences,
+        localisation : localisation
+        }
 
     staff.push(nouvel_employe)
     localStorage.setItem("mes_employes", JSON.stringify(staff))
@@ -124,6 +126,9 @@ function voir_details(index) {
         <div class="space-y-2 text-sm text-gray-700">
             <p><strong>Email :</strong> ${employe_clique.email}</p>
             <p><strong>Téléphone :</strong> ${employe_clique.tel}</p>
+            <p><strong>Localisation actuelle:</strong> 
+                <span>${employe_clique.localisation}</span>
+            </p>
             <hr class="my-3">
             <h4 class="font-bold mb-2">Expériences :</h4>
             <p class="text-gray-500 italic">

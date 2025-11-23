@@ -306,7 +306,7 @@ function afficher_employes_sur_plan() {
                 <div onclick="voir_details(${index})" class="bg-white rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer border border-gray-200 p-1 h-16 w-full"
                     title="${employe.nom}">
                     
-                    <img src="${employe.photo}" class="w-8 h-8 rounded-full object-cover border border-gray-100">
+                    <img src="${employe.photo}" class="w-8 h-8 rounded-full object-cover border border-blue-500">
 
                     <div class="flex items-center gap-2 mt-0.5">
                         <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">

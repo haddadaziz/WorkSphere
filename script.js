@@ -303,7 +303,7 @@ function afficher_employes_sur_plan() {
         if (employe.localisation !== "Unassigned") {
             const boite_salle = document.getElementById(employe.localisation);
             boite_salle.innerHTML += `
-                <div id="carte_employe_assigne" class="bg-white rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer border border-gray-200 p-1 h-16 w-full"
+                <div onclick="voir_details(${index})" class="bg-white rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer border border-gray-200 p-1 h-16 w-full"
                     title="${employe.nom}">
                     
                     <img src="${employe.photo}" class="w-8 h-8 rounded-full object-cover border border-gray-100">
@@ -317,7 +317,7 @@ function afficher_employes_sur_plan() {
                             </svg>
                         </button>
                         
-                        <button onclick="retirer_assignation(${index})" class="text-gray-400 hover:text-red-600 transition" title="Retirer">
+                        <button onclick="event.stopPropagation(); retirer_assignation(${index})" class="text-gray-400 hover:text-red-600 transition" title="Retirer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="w-3.5 h-3.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />

@@ -68,17 +68,56 @@ add_employee_form.addEventListener("submit", function (e) {
     const telephone = document.getElementById("telephone").value
     const localisation = "Unassigned"
 
+    if (nom === "") {
+        display_red_notification("Le champ Nom est obligatoire.")
+        return
+    }
+    if (role === "") {
+        display_red_notification("Veuillez sélectionner un rôle.")
+        return
+    }
+    if (email === "") {
+        display_red_notification("Le champ Email est obligatoire.")
+        return
+    }
+    if (telephone === "") {
+        display_red_notification("Le champ Téléphone est obligatoire.")
+        return
+    }
+
+    const regex_nom = /^[a-zA-ZÀ-ÿ\s-]+$/
+    const regex_tel = /^[0-9]{10}$/
+
+    if (!regex_nom.test(nom)) {
+        display_red_notification("Le nom ne peut contenir que des lettres, espaces ou tirets")
+        return
+    }
+    if (!regex_tel.test(telephone)) {
+        display_red_notification("Le numéro de téléphone doit contenir 10 chiffres")
+    }
+
     if (photo === "") {
         photo = "https://www.gravatar.com/avatar/?d=mp&s=128"
     }
     let mes_experiences = []
+    let erreur_experience = false
+
     const blocks_experience = ajouter_experience_container.querySelectorAll(".new_employe_experiences")
 
-    blocks_experience.forEach(block => {
+    for (const block of blocks_experience) {
         const poste = block.querySelector("input[name='experience_poste']").value
         const entreprise = block.querySelector("input[name='experience_entreprise']").value
         const debut = block.querySelector("input[name='experience_start_date']").value
         const fin = block.querySelector("input[name='experience_end_date']").value
+
+        if (poste === "" || entreprise === "" || debut === "" || fin === "") {
+            display_red_notification("Tous les champs d'une expérience sont obligatoires.")
+            return
+        }
+        if (new Date(fin) < new Date(debut)) {
+            display_red_notification("La date de fin ne peut pas être avant la date de début.")
+            return
+        }
 
         const une_experience = {
             poste: poste,
@@ -87,7 +126,7 @@ add_employee_form.addEventListener("submit", function (e) {
             fin: fin
         }
         mes_experiences.push(une_experience)
-    })
+    }
 
     const nouvel_employe = {
         nom: nom,
@@ -124,7 +163,7 @@ function afficher_les_employes() {
                 </div>
             </div>
         `
-        compteur++;
+            compteur++;
         }
     })
     if (compteur === 0) {
@@ -252,6 +291,13 @@ function est_autorise(role, salle) {
     if (role === "manager") {
         return true
     }
+    if (salle === "salle_d_archives") {
+        return false
+    }
+    if (role === "nettoyage") {
+        return true
+    }
+
     switch (salle) {
         case "salle_des_serveurs":
             return role === "technicien_it"
@@ -259,8 +305,6 @@ function est_autorise(role, salle) {
             return role === "agent_securite"
         case "salle_reception":
             return role === "receptionniste"
-        case "salle_d_archives":
-            return role !== "nettoyage"
         default:
             return true
     }

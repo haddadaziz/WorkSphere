@@ -88,6 +88,7 @@ add_employee_form.addEventListener("submit", function (e) {
 })
 
 function afficher_les_employes() {
+    let compteur = 0
     unassigned_staff_list.innerHTML = ""
     staff.forEach((employe, index) => {
         if (employe.localisation === "Unassigned") {
@@ -100,8 +101,16 @@ function afficher_les_employes() {
                 </div>
             </div>
         `
+        compteur++;
         }
     })
+    if (compteur === 0) {
+        unassigned_staff_list.innerHTML = `
+            <div class="mt-10 text-gray-500">
+                <p class="text-center font-medium">Aucun employé non assigné.</p>
+            </div>
+        `
+    }
 }
 
 function voir_details(index) {
@@ -308,15 +317,7 @@ function afficher_employes_sur_plan() {
                     
                     <img src="${employe.photo}" class="w-8 h-8 rounded-full object-cover border border-blue-500">
 
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <button class="text-gray-400 hover:text-blue-600 transition" title="Déplacer">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-3.5 h-3.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-                            </svg>
-                        </button>
-                        
+                    <div class="flex gap-2 mt-0.5">
                         <button onclick="event.stopPropagation(); retirer_assignation(${index})" class="text-gray-400 hover:text-red-600 transition" title="Retirer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="w-3.5 h-3.5">

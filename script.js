@@ -20,10 +20,32 @@ const assign_worker_popup_staff_list = document.getElementById("assign_worker_po
 const afficher_employe_popup = document.getElementById("afficher_employe_popup")
 const afficher_employe_popup_close_button = document.getElementById("afficher_employe_popup_close_button")
 const details_employe = document.getElementById("details_employe")
+const success_notification = document.getElementById("success_notification")
+const error_notification = document.getElementById("error_notification")
 
 let staff = JSON.parse(localStorage.getItem("mes_employes")) || []
 afficher_les_employes()
 afficher_employes_sur_plan()
+
+// Fonction qui affiche une notification d'erreur
+function display_red_notification(msg) {
+    success_notification.style.display = "none"
+    error_notification.textContent = msg
+    error_notification.style.display = "block"
+    setTimeout(() => {
+        error_notification.style.display = "none"
+    }, 3000)
+}
+
+// Fonction qui affiche une notification de succès
+function display_green_notification(msg) {
+    error_notification.style.display = "none";
+    success_notification.textContent = msg
+    success_notification.style.display = "block"
+    setTimeout(() => {
+        success_notification.style.display = "none";
+    }, 3000)
+}
 
 // Afficher / Cacher la popup pour assigner un worker
 assign_worker_button.forEach(bouton => {
@@ -85,6 +107,7 @@ add_employee_form.addEventListener("submit", function (e) {
 
     ajouter_employe_view.classList.add("hidden")
     unassigned_workers_view.classList.remove("hidden")
+    display_green_notification("Employé ajouté avec succès !")
 })
 
 function afficher_les_employes() {

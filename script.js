@@ -47,13 +47,6 @@ function display_green_notification(msg) {
     }, 3000)
 }
 
-// Afficher / Cacher la popup pour assigner un worker
-assign_worker_button.forEach(bouton => {
-    bouton.addEventListener("click", () => {
-        assign_worker_popup.classList.remove("hidden")
-    })
-})
-
 assign_worker_popup_close_button.addEventListener("click", () => {
     assign_worker_popup.classList.add("hidden")
 })
@@ -313,6 +306,26 @@ function est_autorise(role, salle) {
 assign_worker_button.forEach(bouton => {
     bouton.addEventListener("click", () => {
         const salle_actuelle = bouton.getAttribute("data-salle")
+        const nb_dans_salle = staff.filter(p => p.localisation === salle_actuelle).length
+        let limite = 15
+        if (salle_actuelle === "salle_des_serveurs") {
+            limite = 3
+        }
+        if (salle_actuelle === "salle_reception") {
+            limite = 10
+        }
+        if (salle_actuelle === "salle_de_securite") {
+            limite = 5
+        }
+        if (salle_actuelle === "salle_d_archives") {
+            limite = 2
+        }
+
+        if (nb_dans_salle >= limite) {
+            display_red_notification("Cette salle est complète !")
+            return
+        }
+
         assign_worker_popup_staff_list.innerHTML = ""
         staff.forEach((employe, index) => {
             const est_libre = employe.localisation === "Unassigned"
@@ -396,4 +409,46 @@ function afficher_employes_sur_plan() {
                 `
         }
     })
+    const nb_reception = staff.filter(p => p.localisation === "salle_reception").length
+    const boite_reception = document.getElementById("salle_reception").parentElement
+    if (nb_reception > 0) {
+        boite_reception.classList.remove("bg-[#D9544D]")
+        boite_reception.classList.add("bg-green-200")
+    } else {
+        boite_reception.classList.remove("bg-green-200")
+        boite_reception.classList.add("bg-[#D9544D]")
+    }
+
+    const nb_serveurs = staff.filter(p => p.localisation === "salle_des_serveurs").length
+    const boite_serveurs = document.getElementById("salle_des_serveurs").parentElement
+
+    if (nb_serveurs > 0) {
+        boite_serveurs.classList.remove("bg-[#D9544D]")
+        boite_serveurs.classList.add("bg-green-200")
+    } else {
+        boite_serveurs.classList.remove("bg-green-200")
+        boite_serveurs.classList.add("bg-[#D9544D]")
+    }
+
+    const nb_secu = staff.filter(p => p.localisation === "salle_de_securite").length
+    const boite_secu = document.getElementById("salle_de_securite").parentElement
+
+    if (nb_secu > 0) {
+        boite_secu.classList.remove("bg-[#D9544D]")
+        boite_secu.classList.add("bg-green-200")
+    } else {
+        boite_secu.classList.remove("bg-green-200")
+        boite_secu.classList.add("bg-[#D9544D]")
+    }
+
+    const nb_archives = staff.filter(p => p.localisation === "salle_d_archives").length
+    const boite_archives = document.getElementById("salle_d_archives").parentElement
+
+    if (nb_archives > 0) {
+        boite_archives.classList.remove("bg-[#D9544D]")
+        boite_archives.classList.add("bg-green-200")
+    } else {
+        boite_archives.classList.remove("bg-green-200")
+        boite_archives.classList.add("bg-[#D9544D]")
+    }
 }

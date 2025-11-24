@@ -6,7 +6,7 @@ const ajouter_experience_container = document.getElementById("ajouter_experience
 const ajouter_experience_button = document.getElementById("ajouter_experience_button")
 const photo_input_url = document.getElementById('photo_input_url')
 const photo_preview_url = document.getElementById('photo_preview_url')
-const photo_par_defaut = src = "https://www.gravatar.com/avatar/?d=mp&s=128"
+const photo_par_defaut = "https://www.gravatar.com/avatar/?d=mp&s=128"
 const hide_menu = document.getElementById("hide_menu")
 const close_sidebar_button = document.getElementById("close_sidebar_button")
 const open_sidebar_button = document.getElementById("open_sidebar_button")
@@ -87,6 +87,7 @@ add_employee_form.addEventListener("submit", function (e) {
     }
     if (!regex_tel.test(telephone)) {
         display_red_notification("Le numéro de téléphone doit contenir 10 chiffres")
+        return
     }
 
     if (photo === "") {
@@ -306,32 +307,37 @@ function est_autorise(role, salle) {
 assign_worker_button.forEach(bouton => {
     bouton.addEventListener("click", () => {
         const salle_actuelle = bouton.getAttribute("data-salle")
-        const nb_dans_salle = staff.filter(p => p.localisation === salle_actuelle).length
-        let limite = 15
-        if (salle_actuelle === "salle_des_serveurs") {
-            limite = 3
-        }
-        if (salle_actuelle === "salle_reception") {
-            limite = 10
-        }
-        if (salle_actuelle === "salle_de_securite") {
-            limite = 5
-        }
-        if (salle_actuelle === "salle_d_archives") {
-            limite = 2
-        }
+        afficher_employe_a_assigner(salle_actuelle)
+        assign_worker_popup.classList.remove("hidden")
+    })
+})
 
-        if (nb_dans_salle >= limite) {
-            display_red_notification("Cette salle est complète !")
-            return
-        }
+function afficher_employe_a_assigner(salle_actuelle) {
+    const nb_dans_salle = staff.filter(p => p.localisation === salle_actuelle).length
+    let limite = 15
+    if (salle_actuelle === "salle_des_serveurs") {
+        limite = 3
+    }
+    if (salle_actuelle === "salle_reception") {
+        limite = 10
+    }
+    if (salle_actuelle === "salle_de_securite") {
+        limite = 5
+    }
+    if (salle_actuelle === "salle_d_archives") {
+        limite = 2
+    }
 
-        assign_worker_popup_staff_list.innerHTML = ""
-        staff.forEach((employe, index) => {
-            const est_libre = employe.localisation === "Unassigned"
-            const a_le_droit = est_autorise(employe.role, salle_actuelle)
-            if (est_libre && a_le_droit) {
-                assign_worker_popup_staff_list.innerHTML += `
+    if (nb_dans_salle >= limite) {
+        display_red_notification("Cette salle est complète !")
+        return
+    }
+    assign_worker_popup_staff_list.innerHTML = ""
+    staff.forEach((employe, index) => {
+        const est_libre = employe.localisation === "Unassigned"
+        const a_le_droit = est_autorise(employe.role, salle_actuelle)
+        if (est_libre && a_le_droit) {
+            assign_worker_popup_staff_list.innerHTML += `
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border mb-2">
                         <div class="flex items-center">
                             <img src="${employe.photo}" class="w-10 h-10 rounded-full border border-gray-300 object-cover">
@@ -345,20 +351,18 @@ assign_worker_button.forEach(bouton => {
                         </button>
                     </div>
                 `
-            }
-        })
-        assign_worker_popup.classList.remove("hidden")
+        }
     })
-})
-
+}
 // Quand on cliquer sur assigner
 function valider_assignation(index, salle) {
     staff[index].localisation = salle
     localStorage.setItem("mes_employes", JSON.stringify(staff))
 
-    assign_worker_popup.classList.add("hidden")
     afficher_les_employes()
     afficher_employes_sur_plan()
+    afficher_employe_a_assigner(salle)
+    display_green_notification("Employé Assigné !")
 }
 
 // quand on clique sur retirer
